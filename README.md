@@ -1,5 +1,7 @@
 # Ransack Mongo
 
+[![Build Status](https://travis-ci.org/phstc/ransack_mongo.svg)](https://travis-ci.org/phstc/ransack_mongo)
+
 Ransack Mongo is based on [Ransack](https://github.com/activerecord-hackery/ransack), but for MongoDB. 
 
 With Ransack Mongo you can convert query params into Mongo queries.
