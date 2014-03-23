@@ -6,6 +6,10 @@ Ransack Mongo is based on [Ransack](https://github.com/activerecord-hackery/rans
 
 With Ransack Mongo you can convert query params into Mongo queries.
 
+## Why another gem?
+
+> [Given that Ransack is built on top of ARel and that ARel only works with relational databases, I don't see how we could add Mongoid support without dramatically changing everything.](https://github.com/activerecord-hackery/ransack/issues/120#issuecomment-7539851)
+
 ## Installation
 
 Add this line to your application's Gemfile:
