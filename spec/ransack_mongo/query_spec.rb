@@ -32,6 +32,19 @@ module RansackMongo
     end
 
     context 'when MongoAdapter' do
+      describe '#to_query!' do
+        it 'raises exception when query evaluates to an empty hash' do
+          params = { 'name' => 'Pablo' }
+          expect { described_class.new.to_query!(params) }.to raise_error(MatcherNotFound)
+        end
+
+        it 'returns the query' do
+          params = { 'name_eq' => 'Pablo', 'fullname_cont' => 'Cantero' }
+
+          expect(described_class.new.to_query!(params)).to eq('name' => 'Pablo', 'fullname' => /Cantero/i)
+        end
+      end
+
       describe '#to_query' do
         it 'returns the query' do
           params = { 'name_eq' => 'Pablo', 'fullname_cont' => 'Cantero' }
