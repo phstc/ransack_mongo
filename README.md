@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/phstc/ransack_mongo.svg)](https://travis-ci.org/phstc/ransack_mongo)
 
-Ransack Mongo is based on [Ransack](https://github.com/activerecord-hackery/ransack), but for MongoDB. 
+Ransack Mongo is based on [Ransack](https://github.com/activerecord-hackery/ransack), but for MongoDB.
 
 With Ransack Mongo you can convert query params into Mongo queries.
 
@@ -65,6 +65,16 @@ You can also combine predicates for OR queries.
 query_param = { name_eq: 'Pablo', middle_name_or_last_name_cont: 'Cantero' }
 query.to_query(params[:q])
 # => { name: 'Pablo', '$or' => { middle_name: /Cantero/i, last_name: /Cantero/i } }
+```
+
+### to_query!
+
+You can use to_query! for stricter validations. This method will raise an exception if a query cannot be produced.
+```ruby
+query.to_query({ name: 'Pablo' })
+# => {}
+query.to_query!({ name: 'Pablo' })
+# => RansackMongo::MatcherNotFound: No matchers found. To allow empty queries use .to_query instead
 ```
 
 ## Contributing

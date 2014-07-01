@@ -34,6 +34,16 @@ module RansackMongo
       db_adapter.to_query
     end
 
+    def to_query!(params)
+      selector = to_query params
+
+      if selector.empty?
+        raise MatcherNotFound,  "No matchers found. To allow empty queries use .to_query instead"
+      end
+
+      selector
+    end
+
     def or_query(db_adapter, attr, value, p)
       db_adapter.or_op do
         attr.split('_or_').each do |or_attr|
