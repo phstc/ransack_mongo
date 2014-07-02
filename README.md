@@ -71,9 +71,11 @@ query.to_query(params[:q])
 
 You can use to_query! for stricter validations. This method will raise an exception if a query cannot be produced.
 ```ruby
-query.to_query({ name: 'Pablo' })
+ # xpto isn't a valid predicate
+
+query.to_query(name_xpto: 'Pablo')
 # => {}
-query.to_query!({ name: 'Pablo' })
+query.to_query!(name_xpto: 'Pablo')
 # => RansackMongo::MatcherNotFound: No matchers found. To allow empty queries use .to_query instead
 ```
 
