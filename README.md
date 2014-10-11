@@ -40,7 +40,10 @@ def index
   selector = RansackMongo::Query.parse(params[:q])
 
   # Mongo Ruby Driver
-  @customers = db.customers.find(selector)
+  @customers = db['customers'].find(selector)
+
+  # Moped
+  @customers = session[:customers].find(selector)
 
   # Mongoid
   @customers = Customer.where(selector)
