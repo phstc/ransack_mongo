@@ -28,15 +28,16 @@ Or install it yourself as:
 
 ```ruby
 # GET /customers?q[name_eq]=Pablo&q[middle_name_or_last_name_cont]=Cantero
+
 # params[:q]
 # => { name_eq: 'Pablo', middle_name_or_last_name_cont: 'Cantero' }
-# query.to_query(params[:q])
+
+# RansackMongo::Query.parse(params[:q])
 # => { name: 'Pablo', '$or' => { middle_name: /Cantero/i, last_name: /Cantero/i } }
 
 # GET /customers
 def index
-  query = RansackMongo::Query.new
-  selector = query.to_query(params[:q])
+  selector = RansackMongo::Query.parse(params[:q])
 
   # Mongo Ruby Driver
   @customers = db.customers.find(selector)
@@ -63,20 +64,23 @@ You can also combine predicates for OR queries.
 
 ```ruby
 query_param = { name_eq: 'Pablo', middle_name_or_last_name_cont: 'Cantero' }
-query.to_query(params[:q])
+
+RansackMongo::Query.parse(params[:q])
 # => { name: 'Pablo', '$or' => { middle_name: /Cantero/i, last_name: /Cantero/i } }
 ```
 
-### to_query!
+### parse!
 
-You can use to_query! for stricter validations. This method will raise an exception if a query cannot be produced.
+You can use `parse!` for stricter validations. This method will raise an exception if a query cannot be produced.
+
 ```ruby
  # xpto isn't a valid predicate
 
-query.to_query(name_xpto: 'Pablo')
+RansackMongo::Query.parse(name_xpto: 'Pablo')
 # => {}
-query.to_query!(name_xpto: 'Pablo')
-# => RansackMongo::MatcherNotFound: No matchers found. To allow empty queries use .to_query instead
+
+RansackMongo::Query.parse!(name_xpto: 'Pablo')
+# => RansackMongo::MatcherNotFound: No matchers found. To allow empty queries use .parse instead
 ```
 
 ## Contributing
