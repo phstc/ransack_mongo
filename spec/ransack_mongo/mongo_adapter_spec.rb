@@ -48,35 +48,38 @@ module RansackMongo
       end
     end
 
-    describe '#gt_matcher' do
-      it 'returns the matcher' do
-        subject.gt_matcher('quantity', 1)
+    %w[gt lt gteq lteq].each do |m|
+      op_name = { 'gteq' => 'gte', 'lteq' => 'lte' }[m] || m
 
-        expect(subject.to_query).to eq('quantity' => { '$gt' => 1 })
-      end
-    end
+      describe "##{m}_matcher" do
+        it 'returns the matcher' do
+          subject.send "#{m}_matcher", 'quantity', 1
 
-    describe '#lt_matcher' do
-      it 'returns the matcher' do
-        subject.lt_matcher('quantity', 1)
+          expect(subject.to_query).to eq('quantity' => { "$#{op_name}" => 1 })
+        end
 
-        expect(subject.to_query).to eq('quantity' => { '$lt' => 1 })
-      end
-    end
+        it 'accepts time' do
+          updated_at = Time.now
+          subject.send "#{m}_matcher", 'updated_at', updated_at
 
-    describe '#gteq_matcher' do
-      it 'returns the matcher' do
-        subject.gteq_matcher('quantity', 1)
+          expect(subject.to_query).to eq('updated_at' => { "$#{op_name}" => updated_at })
+        end
 
-        expect(subject.to_query).to eq('quantity' => { '$gte' => 1 })
-      end
-    end
+        it 'accepts time as a string' do
+          updated_at = '2014-10-11 14:48:07 -0300'
 
-    describe '#lteq_matcher' do
-      it 'returns the matcher' do
-        subject.lteq_matcher('quantity', 1)
+          subject.send "#{m}_matcher", 'updated_at', updated_at
 
-        expect(subject.to_query).to eq('quantity' => { '$lte' => 1 })
+          expect(subject.to_query).to eq('updated_at' => { "$#{op_name}" => updated_at })
+        end
+
+        it 'accepts date' do
+          updated_at = Date.new
+
+          subject.send "#{m}_matcher", 'updated_at', updated_at
+
+          expect(subject.to_query).to eq('updated_at' => { "$#{op_name}" => updated_at })
+        end
       end
     end
 

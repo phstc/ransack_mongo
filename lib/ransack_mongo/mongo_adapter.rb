@@ -27,23 +27,19 @@ module RansackMongo
     end
 
     def gt_matcher(attr, value)
-      @query[attr] ||= {}
-      @query[attr]['$gt'] = value.to_f
+      append_sizeable_matcher('$gt', attr, value)
     end
 
     def lt_matcher(attr, value)
-      @query[attr] ||= {}
-      @query[attr]['$lt'] = value.to_f
+      append_sizeable_matcher('$lt', attr, value)
     end
 
     def gteq_matcher(attr, value)
-      @query[attr] ||= {}
-      @query[attr]['$gte'] = value.to_f
+      append_sizeable_matcher('$gte', attr, value)
     end
 
     def lteq_matcher(attr, value)
-      @query[attr] ||= {}
-      @query[attr]['$lte'] = value.to_f
+      append_sizeable_matcher('$lte', attr, value)
     end
 
     def or_op # or operation
@@ -62,6 +58,22 @@ module RansackMongo
 
     def self.predicates
       PREDICATES
+    end
+
+    private
+
+    def append_sizeable_matcher(m, attr, value)
+      @query[attr] ||= {}
+      @query[attr][m] = parse_sizeable_value(value)
+    end
+
+    def parse_sizeable_value(value)
+      case value
+      when Date, Time
+        value
+      else
+        Float(value) rescue value
+      end
     end
   end
 end
