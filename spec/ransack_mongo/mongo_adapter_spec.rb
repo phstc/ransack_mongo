@@ -32,6 +32,22 @@ module RansackMongo
 
         expect(subject.to_query).to eq('name' => { '$in' => %w[Pablo Cantero] })
       end
+
+      context 'when additional empty values present' do
+        it 'returns the matcher ignoring it' do
+          subject.in_matcher('name', ['Pablo', ''])
+
+          expect(subject.to_query).to eq('name' => { '$in' => %w[Pablo] })
+        end
+      end
+
+      context 'when only empty values present' do
+        it 'returns an empty query' do
+          subject.in_matcher('name', [''])
+
+          expect(subject.to_query).to eq({})
+        end
+      end
     end
 
     context 'when combine gt lt gteq and lteq' do
