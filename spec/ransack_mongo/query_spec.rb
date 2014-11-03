@@ -53,7 +53,7 @@ module RansackMongo
         end
 
         context 'when nil query' do
-          it 'return an empty query' do
+          it 'returns an empty query' do
             expect(described_class.parse(nil)).to eq({})
           end
         end
