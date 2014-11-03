@@ -5,7 +5,7 @@ module RansackMongo
     end
 
     def parse(params)
-      params.keys.inject({}) do |query, query_param|
+      (params || {}).keys.inject({}) do |query, query_param|
         attr = query_param.to_s
         p, attr = detect_and_strip_from_string(attr)
 

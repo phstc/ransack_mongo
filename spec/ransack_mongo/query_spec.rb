@@ -19,7 +19,7 @@ module RansackMongo
         end
       end
 
-      describe '#parse' do
+      describe '.parse' do
         context 'when not implement matcher' do
           it 'raises proper exception' do
             params = { 'name_foo' => 'Pablo' }
@@ -32,7 +32,7 @@ module RansackMongo
     end
 
     context 'when MongoAdapter' do
-      describe '#parse!' do
+      describe '.parse!' do
         it 'raises exception when query evaluates to an empty hash' do
           params = { 'name' => 'Pablo' }
           expect { described_class.parse!(params) }.to raise_error(MatcherNotFound)
@@ -45,11 +45,17 @@ module RansackMongo
         end
       end
 
-      describe '#parse' do
+      describe '.parse' do
         it 'returns the query' do
           params = { 'name_eq' => 'Pablo', 'fullname_cont' => 'Cantero' }
 
           expect(described_class.parse(params)).to eq('name' => 'Pablo', 'fullname' => /Cantero/i)
+        end
+
+        context 'when nil query' do
+          it 'returns an empty query' do
+            expect(described_class.parse(nil)).to eq({})
+          end
         end
 
         context 'when or' do
