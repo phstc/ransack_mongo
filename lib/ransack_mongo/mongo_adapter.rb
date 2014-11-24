@@ -1,6 +1,6 @@
 module RansackMongo
   class MongoAdapter
-    PREDICATES = %w[eq not_eq cont in gt lt gteq lteq]
+    PREDICATES = %w[eq not_eq cont in start mstart gt lt gteq lteq]
 
     def initialize
       @query = {}
@@ -24,6 +24,20 @@ module RansackMongo
 
     def in_matcher(attr, value)
       @query[attr] = { '$in' => value }
+    end
+
+    def start_matcher(attr, value)
+      @query[attr] = { '$in' => [/^#{value}/] }
+    end
+
+    def mstart_matcher(attr, value)
+      values = value.split(",").map do |current|
+        if (current = current.strip).length > 0
+          /^#{current}/
+        end
+      end.compact
+
+      @query[attr] = { '$in' => values }
     end
 
     def gt_matcher(attr, value)
