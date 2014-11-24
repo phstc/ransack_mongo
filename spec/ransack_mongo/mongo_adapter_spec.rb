@@ -34,6 +34,34 @@ module RansackMongo
       end
     end
 
+    describe '#start' do
+      it 'returns the matcher' do
+        subject.start_matcher('object_ref', 'Bruno')
+
+        expect(subject.to_query).to eq("object_ref" => { "$in" => [/^Bruno/] })
+      end
+    end
+
+    describe '#mstart' do
+      it 'returns the matcher' do
+        subject.mstart_matcher('name', 'Pablo, Bruno,Dude')
+
+        expect(subject.to_query).to eq("name" => { "$in" => [/^Pablo/, /^Bruno/, /^Dude/] })
+      end
+
+      it 'cleans up the input' do
+        subject.mstart_matcher('name', ',, , ,Pablo,,,,   ,, , , ,')
+
+        expect(subject.to_query).to eq("name" => { "$in" => [/^Pablo/] })
+      end
+
+      it 'accepts single values' do
+        subject.mstart_matcher('name', 'Pablo')
+
+        expect(subject.to_query).to eq("name" => { "$in" => [/^Pablo/] })
+      end
+    end
+
     context 'when combine gt lt gteq and lteq' do
       it 'returns all matchers' do
         subject.gt_matcher('count', '1')
