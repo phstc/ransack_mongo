@@ -46,19 +46,19 @@ module RansackMongo
       it 'returns the matcher' do
         subject.mstart_matcher('name', 'Pablo, Bruno,Dude')
 
-        expect(subject.to_query).to eq("name" => { "$in" => [/^Pablo/, /^Bruno/, /^Dude/] })
+        expect(subject.to_query).to eq("name" => { "$in" => [/^Pablo/i, /^Bruno/i, /^Dude/i] })
       end
 
       it 'cleans up the input' do
         subject.mstart_matcher('name', ',, , ,Pablo,,,,   ,, , , ,')
 
-        expect(subject.to_query).to eq("name" => { "$in" => [/^Pablo/] })
+        expect(subject.to_query).to eq("name" => { "$in" => [/^Pablo/i] })
       end
 
       it 'accepts single values' do
         subject.mstart_matcher('name', 'Pablo')
 
-        expect(subject.to_query).to eq("name" => { "$in" => [/^Pablo/] })
+        expect(subject.to_query).to eq("name" => { "$in" => [/^Pablo/i] })
       end
     end
 

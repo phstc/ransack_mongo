@@ -33,7 +33,7 @@ module RansackMongo
     def mstart_matcher(attr, value)
       values = value.split(",").map do |current|
         if (current = current.strip).length > 0
-          /^#{current}/
+          /^#{current}/i
         end
       end.compact
 
