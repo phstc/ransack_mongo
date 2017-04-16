@@ -23,7 +23,8 @@ module RansackMongo
     end
 
     def in_matcher(attr, value)
-      @query[attr] = { '$in' => value }
+      value.reject!(&:empty?)
+      @query[attr] = { '$in' => value } if value.any?
     end
 
     def start_matcher(attr, value)
